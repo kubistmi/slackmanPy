@@ -1,5 +1,5 @@
 import os
-from slackclient import SlackClient as SC
+import slack
 
 class Slack:
     def __init__(self, user, channel, token='', icon = 'https://img.icons8.com/cotton/2x/server.png'):
@@ -10,7 +10,7 @@ class Slack:
             self.token = os.getenv("SLACK_TOKEN")
         else:
             self.token = token
-        self.client = SC(self.token)
+        self.client = slack.WebClient(token=self.token)
     #
     def send(self, message, channel='', user='', icon=''):
         if channel == '':
@@ -21,8 +21,7 @@ class Slack:
             icon = self.icon
                 
         return(
-            self.client.api_call(
-                "chat.postMessage",
+            self.client.chat_postMessage(
                 channel=channel,
                 text=message,
                 username=user,
